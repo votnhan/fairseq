@@ -239,19 +239,19 @@ class Wav2Vec2Model(BaseFairseqModel):
         feature_enc_layers = eval(cfg.conv_feature_layers)
         self.embed = feature_enc_layers[-1][0]
 
+        self.feature_extractor = ConvFeatureExtractionModel(
+             conv_layers=feature_enc_layers,
+             dropout=0.0,
+             mode=cfg.extractor_mode,
+             conv_bias=cfg.conv_bias,
+        )
+
         # self.feature_extractor = ConvFeatureExtractionModel(
         #     conv_layers=feature_enc_layers,
-        #     dropout=0.0,
+        #     dropout=0.1,
         #     mode=cfg.extractor_mode,
         #     conv_bias=cfg.conv_bias,
         # )
-
-        self.feature_extractor = ConvFeatureExtractionModel(
-            conv_layers=feature_enc_layers,
-            dropout=0.1,
-            mode=cfg.extractor_mode,
-            conv_bias=cfg.conv_bias,
-        )
 
         self.post_extract_proj = (
             nn.Linear(self.embed, cfg.encoder_embed_dim)
